@@ -9817,13 +9817,13 @@ return jQuery;
 },{}],2:[function(require,module,exports){
 "use strict";
 
-if (document.getElementsByClassName("canvas-hanabi1")[0]) {
+if (document.getElementsByClassName("canvas-fireworks1")[0]) {
   (function () {
     var handleTick = function handleTick() {
       stage.update();
     };
 
-    var stage = new createjs.Stage(document.getElementsByClassName("canvas-hanabi1")[0]);
+    var stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks1")[0]);
 
     createjs.Ticker.addEventListener("tick", handleTick);
   })();
@@ -9842,13 +9842,13 @@ var _particle = require('./lib/particle');
 
 var _particle2 = _interopRequireDefault(_particle);
 
-var _hanabi = require('./lib/hanabi1');
+var _fireworks = require('./lib/fireworks1');
 
-var _hanabi2 = _interopRequireDefault(_hanabi);
+var _fireworks2 = _interopRequireDefault(_fireworks);
 
-var _hanabi3 = require('./lib/hanabi2');
+var _fireworks3 = require('./lib/fireworks2');
 
-var _hanabi4 = _interopRequireDefault(_hanabi3);
+var _fireworks4 = _interopRequireDefault(_fireworks3);
 
 var _jquery = require('jquery');
 
@@ -9856,4 +9856,4 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./lib/hanabi1":2,"./lib/hanabi2":3,"./lib/particle":4,"jquery":1}]},{},[5]);
+},{"./lib/fireworks1":2,"./lib/fireworks2":3,"./lib/particle":4,"jquery":1}]},{},[5]);
