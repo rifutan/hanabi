@@ -9817,16 +9817,17 @@ return jQuery;
 },{}],2:[function(require,module,exports){
 "use strict";
 
-if (document.getElementsByClassName("canvas-fireworks1")[0]) {
-  (function () {
-    var handleTick = function handleTick() {
-      stage.update();
-    };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = fireworks1;
+function fireworks1() {
+  var stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks1")[0]);
 
-    var stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks1")[0]);
-
-    createjs.Ticker.addEventListener("tick", handleTick);
-  })();
+  createjs.Ticker.addEventListener("tick", handleTick);
+  function handleTick() {
+    stage.update();
+  }
 }
 
 },{}],3:[function(require,module,exports){
@@ -9855,5 +9856,13 @@ var _jquery = require('jquery');
 var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+if (document.getElementsByClassName("canvas-fireworks1")[0]) {
+  (0, _fireworks2.default)();
+}
+
+if (document.getElementsByClassName("canvas-fireworks2")[0]) {
+  fireworks2();
+}
 
 },{"./lib/fireworks1":2,"./lib/fireworks2":3,"./lib/particle":4,"jquery":1}]},{},[5]);
