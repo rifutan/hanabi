@@ -9934,6 +9934,11 @@ if (document.getElementsByClassName("canvas-particle2")[0]) {
 }
 
 },{}],7:[function(require,module,exports){
+"use strict";
+
+if (document.getElementsByClassName("canvas-particle3")[0]) {}
+
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var _createjsEaseljs = require('createjs-easeljs');
@@ -9947,6 +9952,10 @@ var _particle2 = _interopRequireDefault(_particle);
 var _particle3 = require('./lib/particle2');
 
 var _particle4 = _interopRequireDefault(_particle3);
+
+var _particle5 = require('./lib/particle3');
+
+var _particle6 = _interopRequireDefault(_particle5);
 
 var _hanabi = require('./lib/hanabi1');
 
@@ -9962,4 +9971,4 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./lib/hanabi1":3,"./lib/hanabi2":4,"./lib/particle1":5,"./lib/particle2":6,"createjs-easeljs":1,"jquery":2}]},{},[7]);
+},{"./lib/hanabi1":3,"./lib/hanabi2":4,"./lib/particle1":5,"./lib/particle2":6,"./lib/particle3":7,"createjs-easeljs":1,"jquery":2}]},{},[8]);
