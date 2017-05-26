@@ -9912,6 +9912,7 @@ if (document.getElementsByClassName("canvas-particle2")[0]) {
         particle.vy *= 0.95;
         particle.x += particle.vx;
         particle.y += particle.vy;
+        console.log(particle.y);
         if (particle.y > stage.canvas.height - size) {
           particle.y = stage.canvas.height - size;
           particle.vy *= -1;
@@ -9936,7 +9937,71 @@ if (document.getElementsByClassName("canvas-particle2")[0]) {
 },{}],7:[function(require,module,exports){
 "use strict";
 
-if (document.getElementsByClassName("canvas-particle3")[0]) {}
+if (document.getElementsByClassName("canvas-particle3")[0]) {
+  (function () {
+    var handleTick = function handleTick(event) {
+      emitParticles();
+      updateParticles();
+      stage.update();
+    };
+
+    var emitParticles = function emitParticles() {
+      for (var i = 0; i < 5; i++) {
+        count += 1;
+        var particle = new createjs.Shape();
+        stage.addChild(particle);
+        size = Math.random() * 40;
+        particle.graphics.beginFill(createjs.Graphics.getHSL(count, 50, 50)).drawCircle(0, 0, size);
+        particle.compositeOperation = "lighter";
+        particle.x = stage.mouseX;
+        particle.y = stage.mouseY;
+        particle.vx = 35 * (Math.random() - 0.5);
+        particle.vy = 35 * (Math.random() - 0.5);
+        particle.life = MAX_LIFE;
+        particles.push(particle);
+      }
+    };
+
+    var updateParticles = function updateParticles() {
+      for (var i = 0; i < particles.length; i++) {
+        var particle = particles[i];
+        particle.vy += 1;
+        particle.vx *= 0.95;
+        particle.vy *= 0.95;
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        console.log(particle.y);
+        if (particle.y > stage.canvas.height - size) {
+          particle.y = stage.canvas.height - size;
+          particle.vy *= -1;
+        }
+        var scale = particle.life / MAX_LIFE;
+        particle.scaleX = particle.scaleY = scale;
+        particle.life -= 1;
+        if (particle.life <= 0) {
+          stage.removeChild(particle);
+          particles.splice(i, 1);
+        }
+      }
+    };
+
+    var stage = new createjs.Stage(document.getElementsByClassName("canvas-particle3")[0]);
+
+    var background = new createjs.Shape();
+    background.graphics.beginFill("#000").drawRect(0, 0, stage.canvas.width, stage.canvas.height);
+    stage.addChild(background);
+
+    var count = 0;
+    var particles = [];
+    var size = void 0;
+    var MAX_LIFE = 50;
+
+    createjs.Ticker.addEventListener("tick", handleTick);
+
+    stage.mouseX = stage.canvas.width / 2;
+    stage.mouseY = stage.canvas.height * 1 / 3;
+  })();
+}
 
 },{}],8:[function(require,module,exports){
 'use strict';

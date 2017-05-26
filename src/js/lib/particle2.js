@@ -33,6 +33,7 @@ if (document.getElementsByClassName("canvas-particle2")[0]) {
       particle.vy *= 0.95;
       particle.x += particle.vx;
       particle.y += particle.vy;
+      console.log(particle.y);
       if (particle.y > stage.canvas.height - size) {
         particle.y = stage.canvas.height - size;
         particle.vy *=  -1;
