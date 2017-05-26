@@ -42,8 +42,5 @@
     "presets": [
       "es2015"
     ]
-  },
-  "dependencies": {
-    "createjs-easeljs": "^0.8.2"
   }
 }
