@@ -9817,6 +9817,18 @@ return jQuery;
 },{}],2:[function(require,module,exports){
 "use strict";
 
+if (document.getElementsByClassName("canvas-hanabi1")[0]) {
+  (function () {
+    var handleTick = function handleTick() {
+      stage.update();
+    };
+
+    var stage = new createjs.Stage(document.getElementsByClassName("canvas-hanabi1")[0]);
+
+    createjs.Ticker.addEventListener("tick", handleTick);
+  })();
+}
+
 },{}],3:[function(require,module,exports){
 "use strict";
 
