@@ -9838,40 +9838,102 @@ return jQuery;
 },{}],5:[function(require,module,exports){
 "use strict";
 
-var stage = new createjs.Stage(document.getElementsByClassName("canvas-particle")[0]);
+if (document.getElementsByClassName("canvas-particle1")[0]) {
+  var i;
+  var size;
 
-var particleList = [];
-var particleLength = 30;
-for (var i = 0; i < particleLength; i++) {
-  var particle = new createjs.Shape();
-  var size = 10;
-  particle.graphics.beginFill("#f0f").drawCircle(0, 0, size);
-  stage.addChild(particle);
-  particle.x = stage.canvas.width * Math.random();
-  particle.y = stage.canvas.height * Math.random();
-  particle.vx = 0;
-  particle.vy = 0;
-  particleList[i] = particle;
-}
+  (function () {
+    var handleTick = function handleTick() {
+      for (var i = 0; i < particleLength; i++) {
+        var _particle = particleList[i];
+        _particle.vy += 1;
+        _particle.vx *= 0.95;
+        _particle.vy *= 0.95;
+        _particle.x += _particle.vx;
+        _particle.y += _particle.vy;
+        if (_particle.y > stage.canvas.height - size) {
+          _particle.y = stage.canvas.height - size;
+          _particle.vy *= -1;
+        }
+      }
+      stage.update();
+    };
 
-createjs.Ticker.addEventListener("tick", handleTick);
-function handleTick() {
-  for (var i = 0; i < particleLength; i++) {
-    var _particle = particleList[i];
-    _particle.vy += 1;
-    _particle.vx *= 0.95;
-    _particle.vy *= 0.95;
-    _particle.x += _particle.vx;
-    _particle.y += _particle.vy;
-    if (_particle.y > stage.canvas.height - size) {
-      _particle.y = stage.canvas.height - size;
-      _particle.vy *= -1;
+    var stage = new createjs.Stage(document.getElementsByClassName("canvas-particle1")[0]);
+    var particleList = [];
+    var particleLength = 30;
+    for (i = 0; i < particleLength; i++) {
+      var particle = new createjs.Shape();
+      size = 10;
+
+      particle.graphics.beginFill("#f0f").drawCircle(0, 0, size);
+      stage.addChild(particle);
+      particle.x = stage.canvas.width * Math.random();
+      particle.y = stage.canvas.height * Math.random();
+      particle.vx = 0;
+      particle.vy = 0;
+      particleList[i] = particle;
     }
-  }
-  stage.update();
+
+    createjs.Ticker.addEventListener("tick", handleTick);
+  })();
 }
 
 },{}],6:[function(require,module,exports){
+"use strict";
+
+if (document.getElementsByClassName("canvas-particle2")[0]) {
+  (function () {
+    var handleTick = function handleTick(event) {
+      emitParticles();
+      updateParticles();
+      stage.update();
+    };
+
+    var emitParticles = function emitParticles() {
+      for (var i = 0; i < 5; i++) {
+        var particle = new createjs.Shape();
+        stage.addChild(particle);
+        particle.graphics.beginFill("#0ff").drawCircle(0, 0, size);
+        particle.x = stage.mouseX;
+        particle.y = stage.mouseY;
+        particle.vx = 10 * (Math.random() - 0.5);
+        particle.vy = 10 * (Math.random() - 0.5);
+        particle.life = 100;
+        particles.push(particle);
+      }
+    };
+
+    var updateParticles = function updateParticles() {
+      for (var i = 0; i < particles.length; i++) {
+        var particle = particles[i];
+        particle.vy += 1;
+        particle.vx *= 0.95;
+        particle.vy *= 0.95;
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        if (particle.y > stage.canvas.height - size) {
+          particle.y = stage.canvas.height - size;
+          particle.vy *= -1;
+        }
+        particle.life -= 1;
+        if (particle.life <= 0) {
+          stage.removeChild(particle);
+          particles.splice(i, 1);
+        }
+      }
+    };
+
+    var stage = new createjs.Stage(document.getElementsByClassName("canvas-particle2")[0]);
+
+    var particles = [];
+    var size = 5;
+
+    createjs.Ticker.addEventListener("tick", handleTick);
+  })();
+}
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var _createjsEaseljs = require('createjs-easeljs');
@@ -9881,6 +9943,10 @@ var _createjsEaseljs2 = _interopRequireDefault(_createjsEaseljs);
 var _particle = require('./lib/particle1');
 
 var _particle2 = _interopRequireDefault(_particle);
+
+var _particle3 = require('./lib/particle2');
+
+var _particle4 = _interopRequireDefault(_particle3);
 
 var _hanabi = require('./lib/hanabi1');
 
@@ -9896,4 +9962,4 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./lib/hanabi1":3,"./lib/hanabi2":4,"./lib/particle1":5,"createjs-easeljs":1,"jquery":2}]},{},[6]);
+},{"./lib/hanabi1":3,"./lib/hanabi2":4,"./lib/particle1":5,"./lib/particle2":6,"createjs-easeljs":1,"jquery":2}]},{},[7]);
