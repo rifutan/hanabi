@@ -9840,12 +9840,34 @@ return jQuery;
 
 var stage = new createjs.Stage(document.getElementsByClassName("canvas-particle")[0]);
 
-var particle = new createjs.Shape();
-particle.graphics.beginFill("#f0f").drawCircle(0, 0, 10);
-stage.addChild(particle);
+var particleList = [];
+var particleLength = 30;
+for (var i = 0; i < particleLength; i++) {
+  var particle = new createjs.Shape();
+  var size = 10;
+  particle.graphics.beginFill("#f0f").drawCircle(0, 0, size);
+  stage.addChild(particle);
+  particle.x = stage.canvas.width * Math.random();
+  particle.y = stage.canvas.height * Math.random();
+  particle.vx = 0;
+  particle.vy = 0;
+  particleList[i] = particle;
+}
 
 createjs.Ticker.addEventListener("tick", handleTick);
 function handleTick() {
+  for (var i = 0; i < particleLength; i++) {
+    var _particle = particleList[i];
+    _particle.vy += 1;
+    _particle.vx *= 0.95;
+    _particle.vy *= 0.95;
+    _particle.x += _particle.vx;
+    _particle.y += _particle.vy;
+    if (_particle.y > stage.canvas.height - size) {
+      _particle.y = stage.canvas.height - size;
+      _particle.vy *= -1;
+    }
+  }
   stage.update();
 }
 
