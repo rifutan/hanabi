@@ -1,4 +1,4 @@
-let stage = new createjs.Stage(document.getElementsByClassName("canvas-particle")[0]);
+let stage = new createjs.Stage(document.getElementsByClassName("canvas-particle1")[0]);
 
 let particleList = [];
 let particleLength = 30;

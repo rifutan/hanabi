@@ -9878,7 +9878,7 @@ var _createjsEaseljs = require('createjs-easeljs');
 
 var _createjsEaseljs2 = _interopRequireDefault(_createjsEaseljs);
 
-var _particle = require('./lib/particle');
+var _particle = require('./lib/particle1');
 
 var _particle2 = _interopRequireDefault(_particle);
 
@@ -9896,4 +9896,4 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./lib/hanabi1":3,"./lib/hanabi2":4,"./lib/particle":5,"createjs-easeljs":1,"jquery":2}]},{},[6]);
+},{"./lib/hanabi1":3,"./lib/hanabi2":4,"./lib/particle1":5,"createjs-easeljs":1,"jquery":2}]},{},[6]);
