@@ -9860,17 +9860,19 @@ var ColoredFirework = function (_SimpleFirework) {
         var spark = new createjs.Shape();
         this.stage.addChild(spark);
         spark.x = this.sparkPositionX;
-        spark.y = this.stage.canvas.height;
+        spark.y = this.sparkPositionY;
         spark.angle = Math.random() * 360;
         spark.radian = spark.angle * Math.PI / 180;
         spark.directionX = Math.cos(spark.radian);
         spark.directionY = Math.sin(spark.radian);
+        spark.alpha = 0.0;
 
         var circleIndex = _i % 5;
         spark.vx = (circleIndex + Math.random()) * 3 * spark.directionX;
         spark.vy = (circleIndex + Math.random()) * 3 * spark.directionY;
         var _color = colorAry[circleIndex];
         spark.graphics.beginFill(_color).drawCircle(0, 0, size);
+        spark.compositeOperation = "lighter";
         spark.life = Math.random() * 30 + 30;
         this.sparks.push(spark);
       }
@@ -9902,12 +9904,13 @@ var SimpleFirework = function () {
     this.stage = stage;
     this.sparks = [];
     this.create();
-    this.loanchComplete = false;
+    this.launchInit();
+    this.isLaunchCompleted = false;
     createjs.Ticker.addEventListener("tick", function () {
-      if (!_this.loanchComplete) {
-        _this.loanch();
-      } else {
+      if (_this.isLaunchCompleted) {
         _this.proceed();
+      } else {
+        _this.launch();
       }
     });
   }
@@ -9925,12 +9928,14 @@ var SimpleFirework = function () {
         var spark = new createjs.Shape();
         this.stage.addChild(spark);
         spark.graphics.beginFill(color).drawCircle(0, 0, size);
+        spark.compositeOperation = "lighter";
         spark.x = this.sparkPositionX;
-        spark.y = this.stage.canvas.height;
+        spark.y = this.sparkPositionY;
         spark.angle = Math.random() * 360;
         spark.radian = spark.angle * Math.PI / 180;
         spark.directionX = Math.cos(spark.radian);
         spark.directionY = Math.sin(spark.radian);
+        spark.alpha = 0.0;
         if (i % 3 != 0) {
           spark.vx = (8 + 7 * Math.random()) * spark.directionX;
           spark.vy = (8 + 7 * Math.random()) * spark.directionY;
@@ -9943,15 +9948,23 @@ var SimpleFirework = function () {
       }
     }
   }, {
-    key: "loanch",
-    value: function loanch() {
-      for (var i = 0; i < this.sparks.length; i++) {
-        var spark = this.sparks[i];
-        spark.loanchy = -15;
-        spark.y += spark.loanchy;
-        if (spark.y < this.sparkPositionY) {
-          this.loanchComplete = true;
-        }
+    key: "launchInit",
+    value: function launchInit() {
+      this.launchSpark = new createjs.Shape();
+      this.launchSpark.graphics.beginFill("#ffffff").drawCircle(0, 0, 1);
+      this.stage.addChild(this.launchSpark);
+      this.launchSpark.compositeOperation = "lighter";
+      this.launchSpark.x = this.sparkPositionX;
+      this.launchSpark.y = this.stage.canvas.height;
+    }
+  }, {
+    key: "launch",
+    value: function launch() {
+      this.launchSpark.launchy = -15;
+      this.launchSpark.y += this.launchSpark.launchy;
+      if (this.launchSpark.y < this.sparkPositionY) {
+        this.isLaunchCompleted = true;
+        this.launchSpark.alpha = 0;
       }
     }
   }, {
@@ -9959,6 +9972,7 @@ var SimpleFirework = function () {
     value: function proceed() {
       for (var i = 0; i < this.sparks.length; i++) {
         var spark = this.sparks[i];
+        spark.alpha = 1.0;
         spark.vy += 0.2;
         spark.vx *= 0.9;
         spark.vy *= 0.9;
