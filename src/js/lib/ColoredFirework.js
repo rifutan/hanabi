@@ -8,13 +8,13 @@ export default class ColoredFirework extends SimpleFirework {
     let color;
     const size = 1;
     const sparkLength = 500;
-    const sparkPositionX = 100 + Math.random() * (this.stage.canvas.width - 200);
-    const sparkPositionY = 100 + Math.random() * (this.stage.canvas.height - 200);
+    this.sparkPositionX = 100 + Math.random() * (this.stage.canvas.width - 200);
+    this.sparkPositionY = 100 + Math.random() * (this.stage.canvas.height - 200);
     for (let i = 0; i < sparkLength; i++) {
       const spark = new createjs.Shape();
       this.stage.addChild(spark);
-      spark.x = sparkPositionX;
-      spark.y = sparkPositionY;
+      spark.x = this.sparkPositionX;
+      spark.y = this.stage.canvas.height;
       spark.angle = Math.random() * 360;
       spark.radian = spark.angle * Math.PI / 180;
       spark.directionX = Math.cos(spark.radian);

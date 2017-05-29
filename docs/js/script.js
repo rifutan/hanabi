@@ -9854,13 +9854,13 @@ var ColoredFirework = function (_SimpleFirework) {
       }var color = void 0;
       var size = 1;
       var sparkLength = 500;
-      var sparkPositionX = 100 + Math.random() * (this.stage.canvas.width - 200);
-      var sparkPositionY = 100 + Math.random() * (this.stage.canvas.height - 200);
+      this.sparkPositionX = 100 + Math.random() * (this.stage.canvas.width - 200);
+      this.sparkPositionY = 100 + Math.random() * (this.stage.canvas.height - 200);
       for (var _i = 0; _i < sparkLength; _i++) {
         var spark = new createjs.Shape();
         this.stage.addChild(spark);
-        spark.x = sparkPositionX;
-        spark.y = sparkPositionY;
+        spark.x = this.sparkPositionX;
+        spark.y = this.stage.canvas.height;
         spark.angle = Math.random() * 360;
         spark.radian = spark.angle * Math.PI / 180;
         spark.directionX = Math.cos(spark.radian);
@@ -9902,8 +9902,13 @@ var SimpleFirework = function () {
     this.stage = stage;
     this.sparks = [];
     this.create();
+    this.loanchComplete = false;
     createjs.Ticker.addEventListener("tick", function () {
-      _this.proceed();
+      if (!_this.loanchComplete) {
+        _this.loanch();
+      } else {
+        _this.proceed();
+      }
     });
   }
 
@@ -9914,14 +9919,14 @@ var SimpleFirework = function () {
       var color = colorList[Math.floor(Math.random() * colorList.length)];
       var size = 1;
       var sparkLength = 500;
-      var sparkPositionX = 100 + Math.random() * (this.stage.canvas.width - 200);
-      var sparkPositionY = 100 + Math.random() * (this.stage.canvas.height - 200);
+      this.sparkPositionX = 200 + Math.random() * (this.stage.canvas.width - 400);
+      this.sparkPositionY = 200 + Math.random() * (this.stage.canvas.height - 400);
       for (var i = 0; i < sparkLength; i++) {
         var spark = new createjs.Shape();
         this.stage.addChild(spark);
         spark.graphics.beginFill(color).drawCircle(0, 0, size);
-        spark.x = sparkPositionX;
-        spark.y = sparkPositionY;
+        spark.x = this.sparkPositionX;
+        spark.y = this.stage.canvas.height;
         spark.angle = Math.random() * 360;
         spark.radian = spark.angle * Math.PI / 180;
         spark.directionX = Math.cos(spark.radian);
@@ -9935,6 +9940,18 @@ var SimpleFirework = function () {
         }
         spark.life = Math.random() * 30 + 30;
         this.sparks.push(spark);
+      }
+    }
+  }, {
+    key: "loanch",
+    value: function loanch() {
+      for (var i = 0; i < this.sparks.length; i++) {
+        var spark = this.sparks[i];
+        spark.loanchy = -15;
+        spark.y += spark.loanchy;
+        if (spark.y < this.sparkPositionY) {
+          this.loanchComplete = true;
+        }
       }
     }
   }, {

@@ -3,8 +3,13 @@ export default class SimpleFirework {
     this.stage = stage;
     this.sparks = [];
     this.create();
+    this.loanchComplete = false;
     createjs.Ticker.addEventListener("tick", () => {
-      this.proceed();
+      if (!this.loanchComplete) {
+        this.loanch();
+      } else {
+        this.proceed();
+      }
     });
   }
   create() {
@@ -12,14 +17,14 @@ export default class SimpleFirework {
     const color = colorList[Math.floor(Math.random() * colorList.length)];
     const size = 1;
     const sparkLength = 500;
-    const sparkPositionX = 100 + Math.random() * (this.stage.canvas.width - 200);
-    const sparkPositionY = 100 + Math.random() * (this.stage.canvas.height - 200);
+    this.sparkPositionX = 200 + Math.random() * (this.stage.canvas.width - 400);
+    this.sparkPositionY = 200 + Math.random() * (this.stage.canvas.height - 400);
     for (let i = 0; i < sparkLength; i++) {
       const spark = new createjs.Shape();
       this.stage.addChild(spark);
       spark.graphics.beginFill(color).drawCircle(0, 0, size);
-      spark.x = sparkPositionX;
-      spark.y = sparkPositionY;
+      spark.x = this.sparkPositionX;
+      spark.y = this.stage.canvas.height;
       spark.angle = Math.random() * 360;
       spark.radian = spark.angle * Math.PI / 180;
       spark.directionX = Math.cos(spark.radian);
@@ -33,6 +38,16 @@ export default class SimpleFirework {
       }
       spark.life = Math.random() * 30 + 30;
       this.sparks.push(spark);
+    }
+  }
+  loanch() {
+    for (let i = 0; i < this.sparks.length; i++) {
+      const spark = this.sparks[i];
+      spark.loanchy = -15;
+      spark.y += spark.loanchy;
+      if (spark.y < this.sparkPositionY) {
+        this.loanchComplete = true;
+      }
     }
   }
   proceed() {
