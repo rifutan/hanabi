@@ -30,6 +30,7 @@ export default function fireworks1() {
       // fireworks.directionY = Math.sin(fireworks.radian);
       fireworks.vx = 20 * (Math.random() - 0.5);
       fireworks.vy = 20 * (Math.random() - 0.5);
+      fireworks.life = 60;
       fireworksList.push(fireworks);
     }
   }
@@ -37,11 +38,20 @@ export default function fireworks1() {
   function updateFireworks() {
     for (let i = 0; i < fireworksList.length; i++) {
       const fireworks = fireworksList[i];
-      fireworks.vy += 1;
+      fireworks.vy += 0.15;
       fireworks.vx *= 0.9;
       fireworks.vy *= 0.9;
       fireworks.x += fireworks.vx;
       fireworks.y += fireworks.vy;
+      fireworks.life -= 1;
+      if (fireworks.life < 20) {
+        fireworks.alpha = fireworks.life / 20;
+      }
+      if (fireworks.life <= 0) {
+        stage.removeChild(fireworks);
+        fireworksList.splice(i, 1);
+        i -= 1;
+      }
     }
   }
 }
