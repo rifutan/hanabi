@@ -9912,14 +9912,15 @@ var _SimpleFirework2 = _interopRequireDefault(_SimpleFirework);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function fireworks1() {
-  var stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks1")[0]);
+  var stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks")[0]);
   var fireworks = [];
   var background = new createjs.Shape();
   background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], stage.canvas.width / 2, 0, stage.canvas.width / 2, stage.canvas.height).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
   stage.addChild(background);
 
   window.setInterval(function () {
-    var firework = new _SimpleFirework2.default(stage);
+    var simpleFirework = new _SimpleFirework2.default(stage);
+    //const coloredFirework = new ColoredFirework(stage);
   }, 2000);
 
   createjs.Ticker.addEventListener("tick", function () {
@@ -9931,22 +9932,15 @@ function fireworks1() {
 "use strict";
 
 },{}],5:[function(require,module,exports){
-"use strict";
-
-},{}],6:[function(require,module,exports){
 'use strict';
 
 var _particle = require('./lib/particle');
 
 var _particle2 = _interopRequireDefault(_particle);
 
-var _fireworks = require('./lib/fireworks1');
+var _fireworks = require('./lib/fireworks');
 
 var _fireworks2 = _interopRequireDefault(_fireworks);
-
-var _fireworks3 = require('./lib/fireworks2');
-
-var _fireworks4 = _interopRequireDefault(_fireworks3);
 
 var _jquery = require('jquery');
 
@@ -9954,12 +9948,8 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-if (document.getElementsByClassName("canvas-fireworks1")[0]) {
+if (document.getElementsByClassName("canvas-fireworks")[0]) {
   (0, _fireworks2.default)();
 }
 
-if (document.getElementsByClassName("canvas-fireworks2")[0]) {
-  (0, _fireworks4.default)();
-}
-
-},{"./lib/fireworks1":3,"./lib/fireworks2":4,"./lib/particle":5,"jquery":1}]},{},[6]);
+},{"./lib/fireworks":3,"./lib/particle":4,"jquery":1}]},{},[5]);
