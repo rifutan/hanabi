@@ -1,28 +1,39 @@
-export default function fireworks1() {
-  const stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks1")[0]);
-  const background = new createjs.Shape();
-  background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], stage.canvas.width/2, 0, stage.canvas.width/2, stage.canvas.height)
-                     .drawRect(0, 0, stage.canvas.width, stage.canvas.height);
-  stage.addChild(background);
+export default class Fireworks1 {
+  constructor() {
+    this.stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks1")[0]);
+    this.canvasWidth = this.stage.canvas.width;
+    this.canvasHeight = this.stage.canvas.height;
+    this.fireworks = [];
+    this.colorList = ["#fff599", "#00ff7f", "#ff69b4", "#99eeff"];
 
-  const fireworks = [];
-  window.setInterval(emitFireworks, 2000);
+    this.background();
+    window.setInterval(() => {
+      this.emitFireworks()
+    }, 2000);
 
-  createjs.Ticker.addEventListener("tick", handleTick);
-  function handleTick() {
-    updateFireworks();
-    stage.update();
+    createjs.Ticker.addEventListener("tick", () => {
+      this.updateFireworks();
+      this.stage.update();
+    });
   }
 
-  function emitFireworks() {
+  background() {
+    const background = new createjs.Shape();
+    background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], this.canvasWidth/2, 0, this.canvasWidth/2, this.canvasHeight)
+                       .drawRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.stage.addChild(background);
+  }
+
+  emitFireworks() {
+    const color = this.colorList[Math.floor(Math.random() * this.colorList.length)];
     const size = 1;
-    const sparkLength = 300;
-    const sparkPositionX = 100 + Math.random() * (stage.canvas.width - 200);
-    const sparkPositionY = 100 + Math.random() * (stage.canvas.height - 200);
+    const sparkLength = 500;
+    const sparkPositionX = 100 + Math.random() * (this.canvasWidth - 200);
+    const sparkPositionY = 100 + Math.random() * (this.canvasHeight - 200);
     for (let i = 0; i < sparkLength; i++) {
       const spark = new createjs.Shape();
-      stage.addChild(spark);
-      spark.graphics.beginFill("#fffacd").drawCircle(0, 0, size);
+      this.stage.addChild(spark);
+      spark.graphics.beginFill(color).drawCircle(0, 0, size);
       spark.x = sparkPositionX;
       spark.y = sparkPositionY;
       spark.angle = Math.random() * 360;
@@ -37,13 +48,12 @@ export default function fireworks1() {
         spark.vy = (1 + 8 * Math.random()) * spark.directionY;
       }
       spark.life = Math.random() * 30 + 30;
-      fireworks.push(spark);
+      this.fireworks.push(spark);
     }
   }
-
-  function updateFireworks() {
-    for (let i = 0; i < fireworks.length; i++) {
-      const spark = fireworks[i];
+  updateFireworks() {
+    for (let i = 0; i < this.fireworks.length; i++) {
+      const spark = this.fireworks[i];
       spark.vy += 0.2;
       spark.vx *= 0.9;
       spark.vy *= 0.9;
@@ -54,10 +64,13 @@ export default function fireworks1() {
         spark.alpha = spark.life / 20;
       }
       if (spark.life <= 0) {
-        stage.removeChild(spark);
-        fireworks.splice(i, 1);
+        this.stage.removeChild(spark);
+        this.fireworks.splice(i, 1);
         i -= 1;
       }
     }
+  }
+  setLife() {
+
   }
 }

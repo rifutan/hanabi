@@ -9820,69 +9820,100 @@ return jQuery;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = fireworks1;
-function fireworks1() {
-  var stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks1")[0]);
-  var background = new createjs.Shape();
-  background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], stage.canvas.width / 2, 0, stage.canvas.width / 2, stage.canvas.height).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
-  stage.addChild(background);
 
-  var fireworks = [];
-  window.setInterval(emitFireworks, 2000);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-  createjs.Ticker.addEventListener("tick", handleTick);
-  function handleTick() {
-    updateFireworks();
-    stage.update();
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Fireworks1 = function () {
+  function Fireworks1() {
+    var _this = this;
+
+    _classCallCheck(this, Fireworks1);
+
+    this.stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks1")[0]);
+    this.canvasWidth = this.stage.canvas.width;
+    this.canvasHeight = this.stage.canvas.height;
+    this.fireworks = [];
+    this.colorList = ["#fff599", "#00ff7f", "#ff69b4", "#99eeff"];
+
+    this.background();
+    window.setInterval(function () {
+      _this.emitFireworks();
+    }, 2000);
+
+    createjs.Ticker.addEventListener("tick", function () {
+      _this.updateFireworks();
+      _this.stage.update();
+    });
   }
 
-  function emitFireworks() {
-    var size = 1;
-    var sparkLength = 300;
-    var sparkPositionX = 100 + Math.random() * (stage.canvas.width - 200);
-    var sparkPositionY = 100 + Math.random() * (stage.canvas.height - 200);
-    for (var i = 0; i < sparkLength; i++) {
-      var spark = new createjs.Shape();
-      stage.addChild(spark);
-      spark.graphics.beginFill("#fffacd").drawCircle(0, 0, size);
-      spark.x = sparkPositionX;
-      spark.y = sparkPositionY;
-      spark.angle = Math.random() * 360;
-      spark.radian = spark.angle * Math.PI / 180;
-      spark.directionX = Math.cos(spark.radian);
-      spark.directionY = Math.sin(spark.radian);
-      if (i % 3 != 0) {
-        spark.vx = (8 + 7 * Math.random()) * spark.directionX;
-        spark.vy = (8 + 7 * Math.random()) * spark.directionY;
-      } else {
-        spark.vx = (1 + 8 * Math.random()) * spark.directionX;
-        spark.vy = (1 + 8 * Math.random()) * spark.directionY;
-      }
-      spark.life = Math.random() * 30 + 30;
-      fireworks.push(spark);
+  _createClass(Fireworks1, [{
+    key: "background",
+    value: function background() {
+      var background = new createjs.Shape();
+      background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], this.canvasWidth / 2, 0, this.canvasWidth / 2, this.canvasHeight).drawRect(0, 0, this.canvasWidth, this.canvasHeight);
+      this.stage.addChild(background);
     }
-  }
-
-  function updateFireworks() {
-    for (var i = 0; i < fireworks.length; i++) {
-      var spark = fireworks[i];
-      spark.vy += 0.2;
-      spark.vx *= 0.9;
-      spark.vy *= 0.9;
-      spark.x += spark.vx;
-      spark.y += spark.vy;
-      spark.life -= 1;
-      if (spark.life < 20) {
-        spark.alpha = spark.life / 20;
-      }
-      if (spark.life <= 0) {
-        stage.removeChild(spark);
-        fireworks.splice(i, 1);
-        i -= 1;
+  }, {
+    key: "emitFireworks",
+    value: function emitFireworks() {
+      var color = this.colorList[Math.floor(Math.random() * this.colorList.length)];
+      var size = 1;
+      var sparkLength = 500;
+      var sparkPositionX = 100 + Math.random() * (this.canvasWidth - 200);
+      var sparkPositionY = 100 + Math.random() * (this.canvasHeight - 200);
+      for (var i = 0; i < sparkLength; i++) {
+        var spark = new createjs.Shape();
+        this.stage.addChild(spark);
+        spark.graphics.beginFill(color).drawCircle(0, 0, size);
+        spark.x = sparkPositionX;
+        spark.y = sparkPositionY;
+        spark.angle = Math.random() * 360;
+        spark.radian = spark.angle * Math.PI / 180;
+        spark.directionX = Math.cos(spark.radian);
+        spark.directionY = Math.sin(spark.radian);
+        if (i % 3 != 0) {
+          spark.vx = (8 + 7 * Math.random()) * spark.directionX;
+          spark.vy = (8 + 7 * Math.random()) * spark.directionY;
+        } else {
+          spark.vx = (1 + 8 * Math.random()) * spark.directionX;
+          spark.vy = (1 + 8 * Math.random()) * spark.directionY;
+        }
+        spark.life = Math.random() * 30 + 30;
+        this.fireworks.push(spark);
       }
     }
-  }
-}
+  }, {
+    key: "updateFireworks",
+    value: function updateFireworks() {
+      for (var i = 0; i < this.fireworks.length; i++) {
+        var spark = this.fireworks[i];
+        spark.vy += 0.2;
+        spark.vx *= 0.9;
+        spark.vy *= 0.9;
+        spark.x += spark.vx;
+        spark.y += spark.vy;
+        spark.life -= 1;
+        if (spark.life < 20) {
+          spark.alpha = spark.life / 20;
+        }
+        if (spark.life <= 0) {
+          this.stage.removeChild(spark);
+          this.fireworks.splice(i, 1);
+          i -= 1;
+        }
+      }
+    }
+  }, {
+    key: "setLife",
+    value: function setLife() {}
+  }]);
+
+  return Fireworks1;
+}();
+
+exports.default = Fireworks1;
 
 },{}],3:[function(require,module,exports){
 "use strict";
@@ -9897,13 +9928,13 @@ var _particle = require('./lib/particle');
 
 var _particle2 = _interopRequireDefault(_particle);
 
-var _fireworks = require('./lib/fireworks1');
+var _fireworks2 = require('./lib/fireworks1');
 
-var _fireworks2 = _interopRequireDefault(_fireworks);
+var _fireworks3 = _interopRequireDefault(_fireworks2);
 
-var _fireworks3 = require('./lib/fireworks2');
+var _fireworks4 = require('./lib/fireworks2');
 
-var _fireworks4 = _interopRequireDefault(_fireworks3);
+var _fireworks5 = _interopRequireDefault(_fireworks4);
 
 var _jquery = require('jquery');
 
@@ -9912,11 +9943,11 @@ var _jquery2 = _interopRequireDefault(_jquery);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 if (document.getElementsByClassName("canvas-fireworks1")[0]) {
-  (0, _fireworks2.default)();
+  var fireworks = new _fireworks3.default();
 }
 
 if (document.getElementsByClassName("canvas-fireworks2")[0]) {
-  fireworks2();
+  var _fireworks = new _fireworks5.default();
 }
 
 },{"./lib/fireworks1":2,"./lib/fireworks2":3,"./lib/particle":4,"jquery":1}]},{},[5]);
