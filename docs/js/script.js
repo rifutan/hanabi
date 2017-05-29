@@ -9824,11 +9824,11 @@ exports.default = fireworks1;
 function fireworks1() {
   var stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks1")[0]);
   var background = new createjs.Shape();
-  background.graphics.beginLinearGradientFill(["#191970", "#000000"], [0, 1], stage.canvas.width / 2, 0, stage.canvas.width / 2, stage.canvas.height).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
+  background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], stage.canvas.width / 2, 0, stage.canvas.width / 2, stage.canvas.height).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
   stage.addChild(background);
 
-  var fireworksList = [];
-  emitFireworks();
+  var fireworks = [];
+  window.setInterval(emitFireworks, 2000);
 
   createjs.Ticker.addEventListener("tick", handleTick);
   function handleTick() {
@@ -9837,41 +9837,47 @@ function fireworks1() {
   }
 
   function emitFireworks() {
-    var size = 0.5;
-    var fireworksLength = 100;
-    var fireworksPositionX = Math.random() * stage.canvas.width;
-    var fireworksPositionY = Math.random() * stage.canvas.height;
-    for (var i = 0; i < fireworksLength; i++) {
-      var fireworks = new createjs.Shape();
-      stage.addChild(fireworks);
-      fireworks.graphics.beginFill("#fffacd").drawCircle(0, 0, size);
-      fireworks.x = fireworksPositionX;
-      fireworks.y = fireworksPositionY;
-      // fireworks.radian = Math.random() * 2 * Math.PI;
-      // fireworks.directionX = Math.cos(fireworks.radian);
-      // fireworks.directionY = Math.sin(fireworks.radian);
-      fireworks.vx = 20 * (Math.random() - 0.5);
-      fireworks.vy = 20 * (Math.random() - 0.5);
-      fireworks.life = 60;
-      fireworksList.push(fireworks);
+    var size = 1;
+    var sparkLength = 300;
+    var sparkPositionX = 100 + Math.random() * (stage.canvas.width - 200);
+    var sparkPositionY = 100 + Math.random() * (stage.canvas.height - 200);
+    for (var i = 0; i < sparkLength; i++) {
+      var spark = new createjs.Shape();
+      stage.addChild(spark);
+      spark.graphics.beginFill("#fffacd").drawCircle(0, 0, size);
+      spark.x = sparkPositionX;
+      spark.y = sparkPositionY;
+      spark.angle = Math.random() * 360;
+      spark.radian = spark.angle * Math.PI / 180;
+      spark.directionX = Math.cos(spark.radian);
+      spark.directionY = Math.sin(spark.radian);
+      if (i % 3 != 0) {
+        spark.vx = (8 + 7 * Math.random()) * spark.directionX;
+        spark.vy = (8 + 7 * Math.random()) * spark.directionY;
+      } else {
+        spark.vx = (1 + 8 * Math.random()) * spark.directionX;
+        spark.vy = (1 + 8 * Math.random()) * spark.directionY;
+      }
+      spark.life = Math.random() * 30 + 30;
+      fireworks.push(spark);
     }
   }
 
   function updateFireworks() {
-    for (var i = 0; i < fireworksList.length; i++) {
-      var fireworks = fireworksList[i];
-      fireworks.vy += 0.15;
-      fireworks.vx *= 0.9;
-      fireworks.vy *= 0.9;
-      fireworks.x += fireworks.vx;
-      fireworks.y += fireworks.vy;
-      fireworks.life -= 1;
-      if (fireworks.life < 20) {
-        fireworks.alpha = fireworks.life / 20;
+    for (var i = 0; i < fireworks.length; i++) {
+      var spark = fireworks[i];
+      spark.vy += 0.2;
+      spark.vx *= 0.9;
+      spark.vy *= 0.9;
+      spark.x += spark.vx;
+      spark.y += spark.vy;
+      spark.life -= 1;
+      if (spark.life < 20) {
+        spark.alpha = spark.life / 20;
       }
-      if (fireworks.life <= 0) {
-        stage.removeChild(fireworks);
-        fireworksList.splice(i, 1);
+      if (spark.life <= 0) {
+        stage.removeChild(spark);
+        fireworks.splice(i, 1);
         i -= 1;
       }
     }
