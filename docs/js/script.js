@@ -10016,9 +10016,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function fireworks1() {
   var stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks")[0]);
+  stage.autoClear = false;
   var fireworks = [];
   var background = new createjs.Shape();
   background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], stage.canvas.width / 2, 0, stage.canvas.width / 2, stage.canvas.height).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
+  background.alpha = 0.4;
   stage.addChild(background);
 
   window.setInterval(function () {
