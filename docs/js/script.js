@@ -9854,8 +9854,8 @@ var ColoredFirework = function (_SimpleFirework) {
       }var color = void 0;
       var size = 1;
       var sparkLength = 500;
-      this.sparkPositionX = 100 + Math.random() * (this.stage.canvas.width - 200);
-      this.sparkPositionY = 100 + Math.random() * (this.stage.canvas.height - 200);
+      this.sparkPositionX = 200 + Math.random() * (this.stage.canvas.width - 400);
+      this.sparkPositionY = 200 + Math.random() * (this.stage.canvas.height - 400);
       for (var _i = 0; _i < sparkLength; _i++) {
         var spark = new createjs.Shape();
         this.stage.addChild(spark);
