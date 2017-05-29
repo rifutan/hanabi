@@ -1,4 +1,5 @@
 import SimpleFirework from './SimpleFirework';
+import ColoredFirework from './ColoredFirework';
 
 export default function fireworks1() {
   const stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks")[0]);
@@ -10,8 +11,10 @@ export default function fireworks1() {
 
   window.setInterval(() => {
     const simpleFirework = new SimpleFirework(stage);
-    //const coloredFirework = new ColoredFirework(stage);
   }, 2000);
+  window.setInterval(() => {
+    const coloredFirework = new ColoredFirework(stage);
+  }, 2500);
 
   createjs.Ticker.addEventListener("tick", () => {
     stage.update();
