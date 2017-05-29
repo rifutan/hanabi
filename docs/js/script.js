@@ -9823,6 +9823,74 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _SimpleFirework2 = require("./SimpleFirework");
+
+var _SimpleFirework3 = _interopRequireDefault(_SimpleFirework2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ColoredFirework = function (_SimpleFirework) {
+  _inherits(ColoredFirework, _SimpleFirework);
+
+  function ColoredFirework() {
+    _classCallCheck(this, ColoredFirework);
+
+    return _possibleConstructorReturn(this, (ColoredFirework.__proto__ || Object.getPrototypeOf(ColoredFirework)).apply(this, arguments));
+  }
+
+  _createClass(ColoredFirework, [{
+    key: "create",
+    value: function create() {
+      var colorList = ["#fff599", "#00ff7f", "#ff69b4", "#99eeff", "#ffffff"];
+      var colorAry = [];
+      for (var i = 0; i < 5; i++) {
+        colorAry.push(colorList[Math.floor(Math.random() * colorList.length)]);
+      }var color = void 0;
+      var size = 1;
+      var sparkLength = 500;
+      var sparkPositionX = 100 + Math.random() * (this.stage.canvas.width - 200);
+      var sparkPositionY = 100 + Math.random() * (this.stage.canvas.height - 200);
+      for (var _i = 0; _i < sparkLength; _i++) {
+        var spark = new createjs.Shape();
+        this.stage.addChild(spark);
+        spark.x = sparkPositionX;
+        spark.y = sparkPositionY;
+        spark.angle = Math.random() * 360;
+        spark.radian = spark.angle * Math.PI / 180;
+        spark.directionX = Math.cos(spark.radian);
+        spark.directionY = Math.sin(spark.radian);
+
+        var circleIndex = _i % 5;
+        spark.vx = (circleIndex + Math.random()) * 3 * spark.directionX;
+        spark.vy = (circleIndex + Math.random()) * 3 * spark.directionY;
+        var _color = colorAry[circleIndex];
+        spark.graphics.beginFill(_color).drawCircle(0, 0, size);
+        spark.life = Math.random() * 30 + 30;
+        this.sparks.push(spark);
+      }
+    }
+  }]);
+
+  return ColoredFirework;
+}(_SimpleFirework3.default);
+
+exports.default = ColoredFirework;
+
+},{"./SimpleFirework":3}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var SimpleFirework = function () {
@@ -9897,40 +9965,44 @@ var SimpleFirework = function () {
 
 exports.default = SimpleFirework;
 
-},{}],3:[function(require,module,exports){
-"use strict";
+},{}],4:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = fireworks1;
 
-var _SimpleFirework = require("./SimpleFirework");
+var _SimpleFirework = require('./SimpleFirework');
 
 var _SimpleFirework2 = _interopRequireDefault(_SimpleFirework);
+
+var _ColoredFirework = require('./ColoredFirework');
+
+var _ColoredFirework2 = _interopRequireDefault(_ColoredFirework);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function fireworks1() {
-  var stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks1")[0]);
+  var stage = new createjs.Stage(document.getElementsByClassName("canvas-fireworks")[0]);
   var fireworks = [];
   var background = new createjs.Shape();
   background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], stage.canvas.width / 2, 0, stage.canvas.width / 2, stage.canvas.height).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
   stage.addChild(background);
 
   window.setInterval(function () {
-    var firework = new _SimpleFirework2.default(stage);
+    var simpleFirework = new _SimpleFirework2.default(stage);
   }, 2000);
+  window.setInterval(function () {
+    var coloredFirework = new _ColoredFirework2.default(stage);
+  }, 2500);
 
   createjs.Ticker.addEventListener("tick", function () {
     stage.update();
   });
 }
 
-},{"./SimpleFirework":2}],4:[function(require,module,exports){
-"use strict";
-
-},{}],5:[function(require,module,exports){
+},{"./ColoredFirework":2,"./SimpleFirework":3}],5:[function(require,module,exports){
 "use strict";
 
 },{}],6:[function(require,module,exports){
@@ -9940,13 +10012,9 @@ var _particle = require('./lib/particle');
 
 var _particle2 = _interopRequireDefault(_particle);
 
-var _fireworks = require('./lib/fireworks1');
+var _fireworks = require('./lib/fireworks');
 
 var _fireworks2 = _interopRequireDefault(_fireworks);
-
-var _fireworks3 = require('./lib/fireworks2');
-
-var _fireworks4 = _interopRequireDefault(_fireworks3);
 
 var _jquery = require('jquery');
 
@@ -9954,12 +10022,8 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-if (document.getElementsByClassName("canvas-fireworks1")[0]) {
+if (document.getElementsByClassName("canvas-fireworks")[0]) {
   (0, _fireworks2.default)();
 }
 
-if (document.getElementsByClassName("canvas-fireworks2")[0]) {
-  (0, _fireworks4.default)();
-}
-
-},{"./lib/fireworks1":3,"./lib/fireworks2":4,"./lib/particle":5,"jquery":1}]},{},[6]);
+},{"./lib/fireworks":4,"./lib/particle":5,"jquery":1}]},{},[6]);
