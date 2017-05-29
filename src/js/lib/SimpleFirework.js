@@ -4,7 +4,7 @@ export default class SimpleFirework {
     this.sparks = [];
     this.create();
     createjs.Ticker.addEventListener("tick", () => {
-      this.update();
+      this.proceed();
     });
   }
   create() {
@@ -35,7 +35,7 @@ export default class SimpleFirework {
       this.sparks.push(spark);
     }
   }
-  update() {
+  proceed() {
     for (let i = 0; i < this.sparks.length; i++) {
       const spark = this.sparks[i];
       spark.vy += 0.2;

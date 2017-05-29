@@ -9835,7 +9835,7 @@ var SimpleFirework = function () {
     this.sparks = [];
     this.create();
     createjs.Ticker.addEventListener("tick", function () {
-      _this.update();
+      _this.proceed();
     });
   }
 
@@ -9870,8 +9870,8 @@ var SimpleFirework = function () {
       }
     }
   }, {
-    key: "update",
-    value: function update() {
+    key: "proceed",
+    value: function proceed() {
       for (var i = 0; i < this.sparks.length; i++) {
         var spark = this.sparks[i];
         spark.vy += 0.2;
