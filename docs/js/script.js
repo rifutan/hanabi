@@ -9832,13 +9832,13 @@ function fireworks1() {
 
   createjs.Ticker.addEventListener("tick", handleTick);
   function handleTick() {
-    //updateFireworks();
+    updateFireworks();
     stage.update();
   }
 
   function emitFireworks() {
     var size = 0.5;
-    var fireworksLength = 60;
+    var fireworksLength = 100;
     var fireworksPositionX = Math.random() * stage.canvas.width;
     var fireworksPositionY = Math.random() * stage.canvas.height;
     for (var i = 0; i < fireworksLength; i++) {
@@ -9847,7 +9847,23 @@ function fireworks1() {
       fireworks.graphics.beginFill("#fffacd").drawCircle(0, 0, size);
       fireworks.x = fireworksPositionX;
       fireworks.y = fireworksPositionY;
+      // fireworks.radian = Math.random() * 2 * Math.PI;
+      // fireworks.directionX = Math.cos(fireworks.radian);
+      // fireworks.directionY = Math.sin(fireworks.radian);
+      fireworks.vx = 20 * (Math.random() - 0.5);
+      fireworks.vy = 20 * (Math.random() - 0.5);
       fireworksList.push(fireworks);
+    }
+  }
+
+  function updateFireworks() {
+    for (var i = 0; i < fireworksList.length; i++) {
+      var fireworks = fireworksList[i];
+      fireworks.vy += 1;
+      fireworks.vx *= 0.9;
+      fireworks.vy *= 0.9;
+      fireworks.x += fireworks.vx;
+      fireworks.y += fireworks.vy;
     }
   }
 }

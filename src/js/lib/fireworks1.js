@@ -10,13 +10,13 @@ export default function fireworks1() {
 
   createjs.Ticker.addEventListener("tick", handleTick);
   function handleTick() {
-    //updateFireworks();
+    updateFireworks();
     stage.update();
   }
 
   function emitFireworks() {
     const size = 0.5;
-    const fireworksLength = 60;
+    const fireworksLength = 100;
     const fireworksPositionX = Math.random() * stage.canvas.width;
     const fireworksPositionY = Math.random() * stage.canvas.height;
     for (let i = 0; i < fireworksLength; i++) {
@@ -25,7 +25,23 @@ export default function fireworks1() {
       fireworks.graphics.beginFill("#fffacd").drawCircle(0, 0, size);
       fireworks.x = fireworksPositionX;
       fireworks.y = fireworksPositionY;
+      // fireworks.radian = Math.random() * 2 * Math.PI;
+      // fireworks.directionX = Math.cos(fireworks.radian);
+      // fireworks.directionY = Math.sin(fireworks.radian);
+      fireworks.vx = 20 * (Math.random() - 0.5);
+      fireworks.vy = 20 * (Math.random() - 0.5);
       fireworksList.push(fireworks);
+    }
+  }
+
+  function updateFireworks() {
+    for (let i = 0; i < fireworksList.length; i++) {
+      const fireworks = fireworksList[i];
+      fireworks.vy += 1;
+      fireworks.vx *= 0.9;
+      fireworks.vy *= 0.9;
+      fireworks.x += fireworks.vx;
+      fireworks.y += fireworks.vy;
     }
   }
 }
