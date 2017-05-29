@@ -9827,9 +9827,28 @@ function fireworks1() {
   background.graphics.beginLinearGradientFill(["#191970", "#000000"], [0, 1], stage.canvas.width / 2, 0, stage.canvas.width / 2, stage.canvas.height).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
   stage.addChild(background);
 
+  var fireworksList = [];
+  emitFireworks();
+
   createjs.Ticker.addEventListener("tick", handleTick);
   function handleTick() {
+    //updateFireworks();
     stage.update();
+  }
+
+  function emitFireworks() {
+    var size = 0.5;
+    var fireworksLength = 60;
+    var fireworksPositionX = Math.random() * stage.canvas.width;
+    var fireworksPositionY = Math.random() * stage.canvas.height;
+    for (var i = 0; i < fireworksLength; i++) {
+      var fireworks = new createjs.Shape();
+      stage.addChild(fireworks);
+      fireworks.graphics.beginFill("#fffacd").drawCircle(0, 0, size);
+      fireworks.x = fireworksPositionX;
+      fireworks.y = fireworksPositionY;
+      fireworksList.push(fireworks);
+    }
   }
 }
 
