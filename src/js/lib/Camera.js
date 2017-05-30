@@ -1,23 +1,16 @@
 export default class Camera {
-  constructor(stage, background, simpleFirework) {
+  constructor(stage, point = [0, 0]) {
     this.stage = stage;
-    this.background = background;
-    this.simpleFirework = simpleFirework;
-    this.calcDifference();
+    this.destX = this.stage.canvas.width / 2 - point.x;
+    this.destY = this.stage.canvas.height / 2 - point.y;
     createjs.Ticker.addEventListener("tick", () => {
-      this.moveCamera();
+      this.update();
     });
   }
-  calcDifference() {
+  update() {
     this.startX = this.stage.x;
     this.startY = this.stage.y;
-    this.destX = this.stage.canvas.width / 2 - this.simpleFirework.sparkPositionX;
-    this.destY = this.stage.canvas.height / 2 - this.simpleFirework.sparkPositionY;
-  }
-  moveCamera() {
-    // this.stage.x += (this.destX - this.startX) / 24;
-    // this.stage.y += (this.destY - this.startY) / 24;
-    this.stage.x = this.destX;
-    this.stage.y = this.destY;
+    this.stage.x += (this.destX - this.startX) / 2;
+    this.stage.y += (this.destY - this.startY) / 2;
   }
 }

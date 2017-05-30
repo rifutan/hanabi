@@ -12,11 +12,10 @@ export default function fireworks1() {
                      .drawRect(0, 0, stage.canvas.width * 2, stage.canvas.height * 2);
   background.alpha = 1;
   stage.addChild(background);
-
   window.setInterval(() => {
     const simpleFirework = new SimpleFirework(stage);
-    console.log(simpleFirework);
-    const camera = new Camera(stage, background, simpleFirework)
+    const point = new createjs.Point(simpleFirework.sparkPositionX, simpleFirework.sparkPositionY);
+    const camera = new Camera(stage, point);
   }, 2000);
   window.setInterval(() => {
     // const coloredFirework = new ColoredFirework(stage);

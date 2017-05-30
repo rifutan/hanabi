@@ -9826,35 +9826,28 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Camera = function () {
-  function Camera(stage, background, simpleFirework) {
+  function Camera(stage) {
     var _this = this;
+
+    var point = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [0, 0];
 
     _classCallCheck(this, Camera);
 
     this.stage = stage;
-    this.background = background;
-    this.simpleFirework = simpleFirework;
-    this.calcDifference();
+    this.destX = this.stage.canvas.width / 2 - point.x;
+    this.destY = this.stage.canvas.height / 2 - point.y;
     createjs.Ticker.addEventListener("tick", function () {
-      _this.moveCamera();
+      _this.update();
     });
   }
 
   _createClass(Camera, [{
-    key: "calcDifference",
-    value: function calcDifference() {
+    key: "update",
+    value: function update() {
       this.startX = this.stage.x;
       this.startY = this.stage.y;
-      this.destX = this.stage.canvas.width / 2 - this.simpleFirework.sparkPositionX;
-      this.destY = this.stage.canvas.height / 2 - this.simpleFirework.sparkPositionY;
-    }
-  }, {
-    key: "moveCamera",
-    value: function moveCamera() {
-      // this.stage.x += (this.destX - this.startX) / 24;
-      // this.stage.y += (this.destY - this.startY) / 24;
-      this.stage.x = this.destX;
-      this.stage.y = this.destY;
+      this.stage.x += (this.destX - this.startX) / 2;
+      this.stage.y += (this.destY - this.startY) / 2;
     }
   }]);
 
@@ -10112,7 +10105,6 @@ var SimpleFirework = function () {
         spark.compositeOperation = "lighter";
         spark.x = this.sparkPositionX;
         spark.y = this.sparkPositionY;
-        this.returnPosition(spark.x, spark.y);
         spark.angle = Math.random() * 360;
         spark.radian = spark.angle * Math.PI / 180;
         spark.directionX = Math.cos(spark.radian);
@@ -10171,11 +10163,6 @@ var SimpleFirework = function () {
         }
       }
     }
-  }, {
-    key: "returnPosition",
-    value: function returnPosition(x, y) {
-      return [x, y];
-    }
   }]);
 
   return SimpleFirework;
@@ -10217,11 +10204,10 @@ function fireworks1() {
   background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], stage.canvas.width, 0, stage.canvas.width, stage.canvas.height * 2).drawRect(0, 0, stage.canvas.width * 2, stage.canvas.height * 2);
   background.alpha = 1;
   stage.addChild(background);
-
   window.setInterval(function () {
     var simpleFirework = new _SimpleFirework2.default(stage);
-    console.log(simpleFirework);
-    var camera = new _Camera2.default(stage, background, simpleFirework);
+    var point = new createjs.Point(simpleFirework.sparkPositionX, simpleFirework.sparkPositionY);
+    var camera = new _Camera2.default(stage, point);
   }, 2000);
   window.setInterval(function () {
     // const coloredFirework = new ColoredFirework(stage);

@@ -25,7 +25,6 @@ export default class SimpleFirework {
       spark.compositeOperation = "lighter";
       spark.x = this.sparkPositionX;
       spark.y = this.sparkPositionY;
-      this.returnPosition(spark.x, spark.y);
       spark.angle = Math.random() * 360;
       spark.radian = spark.angle * Math.PI / 180;
       spark.directionX = Math.cos(spark.radian);
@@ -77,8 +76,5 @@ export default class SimpleFirework {
         i -= 1;
       }
     }
-  }
-  returnPosition(x, y) {
-    return [x, y];
   }
 }
