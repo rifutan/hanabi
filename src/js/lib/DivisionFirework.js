@@ -1,66 +1,24 @@
-export default class DivisionFirework {
+import SimpleFirework from './SimpleFirework';
 
+export default class DivisionFirework extends SimpleFirework {
   constructor(stage) {
+    super(stage);
+    this.initialize(stage);
+  }
+
+  initialize(stage) {
     this.stage = stage;
     this.sparks = [];
     this.divideSparks = [];
-    this.create();
+    this.create(200, 1); // 引数はsparkの個数とサイズ
     this.launchInit();
     this.isLaunchCompleted = false;
     this.isDivideCompleted = false;
     createjs.Ticker.addEventListener("tick", () => {
-      if (this.isLaunchCompleted) {
-        this.proceed();
-      } else {
-        this.launch();
-      }
       if (this.isDivideCompleted) {
         this.divide();
       }
     });
-  }
-
-  create() {
-    const colorList = ["#fff599", "#00ff7f", "#ff69b4", "#99eeff", "#ffffff"];
-    const size = 1;
-    const sparkLength = 30;
-    this.color = colorList[Math.floor(Math.random() * colorList.length)];
-    this.sparkPositionX = 200 + Math.random() * (this.stage.canvas.width - 400);
-    this.sparkPositionY = 200 + Math.random() * (this.stage.canvas.height - 400);
-    for (let i = 0; i < sparkLength; i++) {
-      const spark = new createjs.Shape();
-      this.stage.addChild(spark);
-      spark.graphics.beginFill(this.color).drawCircle(0, 0, size);
-      spark.compositeOperation = "lighter";
-      spark.x = this.sparkPositionX;
-      spark.y = this.sparkPositionY;
-      spark.angle = Math.random() * 360;
-      spark.radian = spark.angle * Math.PI / 180;
-      spark.directionX = Math.cos(spark.radian);
-      spark.directionY = Math.sin(spark.radian);
-      spark.alpha = 0.0;
-      spark.vx = (5 + 10 * Math.random()) * spark.directionX;
-      spark.vy = (5 + 10 * Math.random()) * spark.directionY;
-      spark.life = Math.random() * 30 + 30;
-      this.sparks.push(spark);
-    }
-  }
-
-  launchInit() {
-    this.launchSpark = new createjs.Shape();
-    this.launchSpark.graphics.beginFill("#ffffff").drawCircle(0, 0, 1);
-    this.stage.addChild(this.launchSpark);
-    this.launchSpark.compositeOperation = "lighter";
-    this.launchSpark.x = this.sparkPositionX;
-    this.launchSpark.y = this.stage.canvas.height;
-  }
-  launch() {
-    this.launchSpark.launchy = -15;
-    this.launchSpark.y += this.launchSpark.launchy;
-    if (this.launchSpark.y < this.sparkPositionY) {
-      this.isLaunchCompleted = true;
-      this.launchSpark.alpha = 0;
-    }
   }
 
   proceed() {
@@ -73,9 +31,10 @@ export default class DivisionFirework {
       spark.x += spark.vx;
       spark.y += spark.vy;
       spark.life -= 1;
-      if(spark.life < 20 && spark.life > 18) {
-        this.isDivideCompleted = true;
+      // 一定のlifeになったら分裂を開始する
+      if(Math.floor(spark.life) == 20) {
         this.divideCreate(spark);
+        this.isDivideCompleted = true;
       }
       if (spark.life < 20) {
         spark.alpha = spark.life / 20;
@@ -87,18 +46,17 @@ export default class DivisionFirework {
       }
     }
   }
+
+  // 基本的には create() => proceed() と同様の処理
   divideCreate(spark) {
-    const divideSparkLength = 3;
-    this.divideSparkPositionX = spark.x;
-    this.divideSparkPositionY = spark.y;
-    console.log(this.divideSparkPositionX);
+    const divideSparkLength = 5;
     for (let i = 0; i < divideSparkLength; i++) {
       const divideSpark = new createjs.Shape();
       this.stage.addChild(divideSpark);
       divideSpark.graphics.beginFill(this.color).drawCircle(0, 0, 1);
       divideSpark.compositeOperation = "lighter";
-      divideSpark.x = this.divideSparkPositionX;
-      divideSpark.y = this.divideSparkPositionY;
+      divideSpark.x = spark.x;
+      divideSpark.y = spark.y;
       divideSpark.angle = Math.random() * 360;
       divideSpark.radian = divideSpark.angle * Math.PI / 180;
       divideSpark.directionX = Math.cos(divideSpark.radian);
@@ -106,10 +64,11 @@ export default class DivisionFirework {
       divideSpark.alpha = 0.0;
       divideSpark.vx = (1 + 5 * Math.random()) * divideSpark.directionX;
       divideSpark.vy = (1 + 5 * Math.random()) * divideSpark.directionY;
-      divideSpark.life = Math.random() * 30 + 30;
+      divideSpark.life = Math.random() * 30 + 10;
       this.divideSparks.push(divideSpark);
     }
   }
+
   divide() {
     for (let i = 0; i < this.divideSparks.length; i++) {
       const divideSpark = this.divideSparks[i];

@@ -13,14 +13,14 @@ export default function fireworks1() {
   stage.addChild(background);
 
   window.setInterval(() => {
-    //const simpleFirework = new SimpleFirework(stage);
+    const simpleFirework = new SimpleFirework(stage);
   }, 2000);
   window.setInterval(() => {
-    //const coloredFirework = new ColoredFirework(stage);
+    const coloredFirework = new ColoredFirework(stage);
   }, 2500);
   window.setInterval(() => {
     const divisionFirework = new DivisionFirework(stage);
-  }, 1500);
+  }, 3000);
 
   createjs.Ticker.addEventListener("tick", () => {
     stage.update();
