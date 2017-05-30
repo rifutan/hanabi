@@ -61,7 +61,7 @@ export default class SimpleFirework {
     for (let i = 0; i < this.sparks.length; i++) {
       const spark = this.sparks[i];
       spark.alpha = 1.0;
-      spark.vy += 0.2;
+      spark.vy += 0.05;
       spark.vx *= 0.9;
       spark.vy *= 0.9;
       spark.x += spark.vx;
