@@ -7,12 +7,16 @@ export default class DivisionFirework {
     this.create();
     //this.launchInit();
     //this.isLaunchCompleted = false;
+    this.isDivideCompleted = true;
     this.isLaunchCompleted = true;
     createjs.Ticker.addEventListener("tick", () => {
       if (this.isLaunchCompleted) {
         this.proceed();
       } else {
         //this.launch();
+      }
+      if (this.isDivideCompleted) {
+        this.divide();
       }
     });
   }
@@ -71,7 +75,9 @@ export default class DivisionFirework {
       spark.y += spark.vy;
       spark.life -= 1;
       if(spark.life < 20 && spark.life > 18) {
-        this.divideCreate(spark);
+        const divideSparkX = spark.x;
+        const divideSparkY = spark.y;
+        this.divideCreate(spark, divideSparkX, divideSparkY);
       }
       if (spark.life < 20) {
         spark.alpha = spark.life / 20;
@@ -83,15 +89,47 @@ export default class DivisionFirework {
       }
     }
   }
-  divideCreate(spark) {
-    const divideSparkLength = 30;
-    this.divideSparkPositionX = spark.x;
-    this.divideSparkPositionY = spark.y;
+  divideCreate(spark, divideSparkX, divideSparkY) {
+    const divideSparkLength = 1;
+    this.divideSparkPositionX = divideSparkX;
+    this.divideSparkPositionY = divideSparkY;
+    console.log(this.divideSparkPositionX);
     for (let i = 0; i < divideSparkLength; i++) {
-      this.divideSparks.push(spark)
+      const divideSpark = new createjs.Shape();
+      this.stage.addChild(divideSpark);
+      divideSpark.graphics.beginFill(this.color).drawCircle(0, 0, 1);
+      divideSpark.compositeOperation = "lighter";
+      divideSpark.x = this.divideSparkPositionX;
+      divideSpark.y = this.divideSparkPositionX;
+      divideSpark.angle = Math.random() * 360;
+      divideSpark.radian = divideSpark.angle * Math.PI / 180;
+      divideSpark.directionX = Math.cos(divideSpark.radian);
+      divideSpark.directionY = Math.sin(divideSpark.radian);
+      divideSpark.alpha = 0.0;
+      divideSpark.vx = (1 + 5 * Math.random()) * divideSpark.directionX;
+      divideSpark.vy = (1 + 5 * Math.random()) * divideSpark.directionY;
+      divideSpark.life = Math.random() * 30 + 30;
+      this.divideSparks.push(divideSpark);
     }
   }
   divide() {
-
+    for (let i = 0; i < this.divideSparks.length; i++) {
+      const divideSpark = this.divideSparks[i];
+      divideSpark.alpha = 1.0;
+      divideSpark.vy += 0.2;
+      divideSpark.vx *= 0.9;
+      divideSpark.vy *= 0.9;
+      divideSpark.x += divideSpark.vx;
+      divideSpark.y += divideSpark.vy;
+      divideSpark.life -= 1;
+      if (divideSpark.life < 20) {
+        divideSpark.alpha = divideSpark.life / 20;
+      }
+      if (divideSpark.life <= 0) {
+        this.stage.removeChild(divideSpark);
+        this.divideSparks.splice(i, 1);
+        i -= 1;
+      }
+    }
   }
 }
