@@ -9829,25 +9829,32 @@ var Camera = function () {
   function Camera(stage) {
     var _this = this;
 
-    var point = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [0, 0];
-
     _classCallCheck(this, Camera);
 
     this.stage = stage;
-    this.destX = this.stage.canvas.width / 2 - point.x;
-    this.destY = this.stage.canvas.height / 2 - point.y;
     createjs.Ticker.addEventListener("tick", function () {
       _this.update();
     });
   }
 
   _createClass(Camera, [{
+    key: "setPoint",
+    value: function setPoint(point) {
+      this.point = point;
+    }
+  }, {
     key: "update",
     value: function update() {
-      this.startX = this.stage.x;
-      this.startY = this.stage.y;
-      this.stage.x += (this.destX - this.startX) / 2;
-      this.stage.y += (this.destY - this.startY) / 2;
+      if (this.point) {
+        this.destX = this.stage.canvas.width / 2 - this.point.x;
+        this.destY = this.stage.canvas.height / 2 - this.point.y;
+        this.startX = this.stage.x;
+        this.startY = this.stage.y;
+        this.stage.x += (this.destX - this.startX) / 24;
+        this.stage.y += (this.destY - this.startY) / 24;
+      } else {
+        return false;
+      }
     }
   }]);
 
@@ -10203,17 +10210,18 @@ function fireworks1() {
   var background = new createjs.Shape();
   background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], stage.canvas.width, 0, stage.canvas.width, stage.canvas.height * 2).drawRect(0, 0, stage.canvas.width * 2, stage.canvas.height * 2);
   background.alpha = 1;
+  var camera = new _Camera2.default(stage);
   stage.addChild(background);
   window.setInterval(function () {
     var simpleFirework = new _SimpleFirework2.default(stage);
     var point = new createjs.Point(simpleFirework.sparkPositionX, simpleFirework.sparkPositionY);
-    var camera = new _Camera2.default(stage, point);
+    camera.setPoint(point);
   }, 2000);
   window.setInterval(function () {
-    // const coloredFirework = new ColoredFirework(stage);
+    var coloredFirework = new _ColoredFirework2.default(stage);
   }, 2500);
   window.setInterval(function () {
-    // const divisionFirework = new DivisionFirework(stage);
+    var divisionFirework = new _DivisionFirework2.default(stage);
   }, 3000);
 
   createjs.Ticker.addEventListener("tick", function () {
