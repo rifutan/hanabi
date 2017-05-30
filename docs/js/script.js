@@ -9905,15 +9905,14 @@ var DivisionFirework = function () {
     this.sparks = [];
     this.divideSparks = [];
     this.create();
-    //this.launchInit();
-    //this.isLaunchCompleted = false;
-    this.isDivideCompleted = true;
-    this.isLaunchCompleted = true;
+    this.launchInit();
+    this.isLaunchCompleted = false;
+    this.isDivideCompleted = false;
     createjs.Ticker.addEventListener("tick", function () {
       if (_this.isLaunchCompleted) {
         _this.proceed();
       } else {
-        //this.launch();
+        _this.launch();
       }
       if (_this.isDivideCompleted) {
         _this.divide();
@@ -9948,24 +9947,26 @@ var DivisionFirework = function () {
         this.sparks.push(spark);
       }
     }
-
-    // launchInit() {
-    //   this.launchSpark = new createjs.Shape();
-    //   this.launchSpark.graphics.beginFill("#ffffff").drawCircle(0, 0, 1);
-    //   this.stage.addChild(this.launchSpark);
-    //   this.launchSpark.compositeOperation = "lighter";
-    //   this.launchSpark.x = this.sparkPositionX;
-    //   this.launchSpark.y = this.stage.canvas.height;
-    // }
-    // launch() {
-    //   this.launchSpark.launchy = -15;
-    //   this.launchSpark.y += this.launchSpark.launchy;
-    //   if (this.launchSpark.y < this.sparkPositionY) {
-    //     this.isLaunchCompleted = true;
-    //     this.launchSpark.alpha = 0;
-    //   }
-    // }
-
+  }, {
+    key: "launchInit",
+    value: function launchInit() {
+      this.launchSpark = new createjs.Shape();
+      this.launchSpark.graphics.beginFill("#ffffff").drawCircle(0, 0, 1);
+      this.stage.addChild(this.launchSpark);
+      this.launchSpark.compositeOperation = "lighter";
+      this.launchSpark.x = this.sparkPositionX;
+      this.launchSpark.y = this.stage.canvas.height;
+    }
+  }, {
+    key: "launch",
+    value: function launch() {
+      this.launchSpark.launchy = -15;
+      this.launchSpark.y += this.launchSpark.launchy;
+      if (this.launchSpark.y < this.sparkPositionY) {
+        this.isLaunchCompleted = true;
+        this.launchSpark.alpha = 0;
+      }
+    }
   }, {
     key: "proceed",
     value: function proceed() {
@@ -9979,9 +9980,8 @@ var DivisionFirework = function () {
         spark.y += spark.vy;
         spark.life -= 1;
         if (spark.life < 20 && spark.life > 18) {
-          var divideSparkX = spark.x;
-          var divideSparkY = spark.y;
-          this.divideCreate(spark, divideSparkX, divideSparkY);
+          this.isDivideCompleted = true;
+          this.divideCreate(spark);
         }
         if (spark.life < 20) {
           spark.alpha = spark.life / 20;
@@ -9995,10 +9995,10 @@ var DivisionFirework = function () {
     }
   }, {
     key: "divideCreate",
-    value: function divideCreate(spark, divideSparkX, divideSparkY) {
-      var divideSparkLength = 1;
-      this.divideSparkPositionX = divideSparkX;
-      this.divideSparkPositionY = divideSparkY;
+    value: function divideCreate(spark) {
+      var divideSparkLength = 3;
+      this.divideSparkPositionX = spark.x;
+      this.divideSparkPositionY = spark.y;
       console.log(this.divideSparkPositionX);
       for (var i = 0; i < divideSparkLength; i++) {
         var divideSpark = new createjs.Shape();
@@ -10006,7 +10006,7 @@ var DivisionFirework = function () {
         divideSpark.graphics.beginFill(this.color).drawCircle(0, 0, 1);
         divideSpark.compositeOperation = "lighter";
         divideSpark.x = this.divideSparkPositionX;
-        divideSpark.y = this.divideSparkPositionX;
+        divideSpark.y = this.divideSparkPositionY;
         divideSpark.angle = Math.random() * 360;
         divideSpark.radian = divideSpark.angle * Math.PI / 180;
         divideSpark.directionX = Math.cos(divideSpark.radian);
@@ -10024,7 +10024,6 @@ var DivisionFirework = function () {
       for (var i = 0; i < this.divideSparks.length; i++) {
         var divideSpark = this.divideSparks[i];
         divideSpark.alpha = 1.0;
-        divideSpark.vy += 0.2;
         divideSpark.vx *= 0.9;
         divideSpark.vy *= 0.9;
         divideSpark.x += divideSpark.vx;
@@ -10187,7 +10186,7 @@ function fireworks1() {
   var fireworks = [];
   var background = new createjs.Shape();
   background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], stage.canvas.width / 2, 0, stage.canvas.width / 2, stage.canvas.height).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
-  background.alpha = 0.4;
+  background.alpha = 0.2;
   stage.addChild(background);
 
   window.setInterval(function () {
