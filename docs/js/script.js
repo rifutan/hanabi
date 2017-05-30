@@ -9884,7 +9884,130 @@ var ColoredFirework = function (_SimpleFirework) {
 
 exports.default = ColoredFirework;
 
-},{"./SimpleFirework":3}],3:[function(require,module,exports){
+},{"./SimpleFirework":4}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var DivisionFirework = function () {
+  function DivisionFirework(stage) {
+    var _this = this;
+
+    _classCallCheck(this, DivisionFirework);
+
+    this.stage = stage;
+    this.sparks = [];
+    this.divideSparks = [];
+    this.create();
+    //this.launchInit();
+    //this.isLaunchCompleted = false;
+    this.isLaunchCompleted = true;
+    createjs.Ticker.addEventListener("tick", function () {
+      if (_this.isLaunchCompleted) {
+        _this.proceed();
+      } else {
+        //this.launch();
+      }
+    });
+  }
+
+  _createClass(DivisionFirework, [{
+    key: "create",
+    value: function create() {
+      var colorList = ["#fff599", "#00ff7f", "#ff69b4", "#99eeff", "#ffffff"];
+      var size = 1;
+      var sparkLength = 30;
+      this.color = colorList[Math.floor(Math.random() * colorList.length)];
+      this.sparkPositionX = 200 + Math.random() * (this.stage.canvas.width - 400);
+      this.sparkPositionY = 200 + Math.random() * (this.stage.canvas.height - 400);
+      for (var i = 0; i < sparkLength; i++) {
+        var spark = new createjs.Shape();
+        this.stage.addChild(spark);
+        spark.graphics.beginFill(this.color).drawCircle(0, 0, size);
+        spark.compositeOperation = "lighter";
+        spark.x = this.sparkPositionX;
+        spark.y = this.sparkPositionY;
+        spark.angle = Math.random() * 360;
+        spark.radian = spark.angle * Math.PI / 180;
+        spark.directionX = Math.cos(spark.radian);
+        spark.directionY = Math.sin(spark.radian);
+        spark.alpha = 0.0;
+        spark.vx = (5 + 10 * Math.random()) * spark.directionX;
+        spark.vy = (5 + 10 * Math.random()) * spark.directionY;
+        spark.life = Math.random() * 30 + 30;
+        this.sparks.push(spark);
+      }
+    }
+
+    // launchInit() {
+    //   this.launchSpark = new createjs.Shape();
+    //   this.launchSpark.graphics.beginFill("#ffffff").drawCircle(0, 0, 1);
+    //   this.stage.addChild(this.launchSpark);
+    //   this.launchSpark.compositeOperation = "lighter";
+    //   this.launchSpark.x = this.sparkPositionX;
+    //   this.launchSpark.y = this.stage.canvas.height;
+    // }
+    // launch() {
+    //   this.launchSpark.launchy = -15;
+    //   this.launchSpark.y += this.launchSpark.launchy;
+    //   if (this.launchSpark.y < this.sparkPositionY) {
+    //     this.isLaunchCompleted = true;
+    //     this.launchSpark.alpha = 0;
+    //   }
+    // }
+
+  }, {
+    key: "proceed",
+    value: function proceed() {
+      for (var i = 0; i < this.sparks.length; i++) {
+        var spark = this.sparks[i];
+        spark.alpha = 1.0;
+        spark.vy += 0.2;
+        spark.vx *= 0.9;
+        spark.vy *= 0.9;
+        spark.x += spark.vx;
+        spark.y += spark.vy;
+        spark.life -= 1;
+        if (spark.life < 20 && spark.life > 18) {
+          this.divideCreate(spark);
+        }
+        if (spark.life < 20) {
+          spark.alpha = spark.life / 20;
+        }
+        if (spark.life <= 0) {
+          this.stage.removeChild(spark);
+          this.sparks.splice(i, 1);
+          i -= 1;
+        }
+      }
+    }
+  }, {
+    key: "divideCreate",
+    value: function divideCreate(spark) {
+      var divideSparkLength = 30;
+      this.divideSparkPositionX = spark.x;
+      this.divideSparkPositionY = spark.y;
+      for (var i = 0; i < divideSparkLength; i++) {
+        this.divideSparks.push(spark);
+      }
+    }
+  }, {
+    key: "divide",
+    value: function divide() {}
+  }]);
+
+  return DivisionFirework;
+}();
+
+exports.default = DivisionFirework;
+
+},{}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9996,7 +10119,7 @@ var SimpleFirework = function () {
 
 exports.default = SimpleFirework;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10012,6 +10135,10 @@ var _ColoredFirework = require('./ColoredFirework');
 
 var _ColoredFirework2 = _interopRequireDefault(_ColoredFirework);
 
+var _DivisionFirework = require('./DivisionFirework');
+
+var _DivisionFirework2 = _interopRequireDefault(_DivisionFirework);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function fireworks1() {
@@ -10024,21 +10151,24 @@ function fireworks1() {
   stage.addChild(background);
 
   window.setInterval(function () {
-    var simpleFirework = new _SimpleFirework2.default(stage);
+    //const simpleFirework = new SimpleFirework(stage);
   }, 2000);
   window.setInterval(function () {
-    var coloredFirework = new _ColoredFirework2.default(stage);
+    //const coloredFirework = new ColoredFirework(stage);
   }, 2500);
+  window.setInterval(function () {
+    var divisionFirework = new _DivisionFirework2.default(stage);
+  }, 1500);
 
   createjs.Ticker.addEventListener("tick", function () {
     stage.update();
   });
 }
 
-},{"./ColoredFirework":2,"./SimpleFirework":3}],5:[function(require,module,exports){
+},{"./ColoredFirework":2,"./DivisionFirework":3,"./SimpleFirework":4}],6:[function(require,module,exports){
 "use strict";
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var _particle = require('./lib/particle');
@@ -10059,4 +10189,4 @@ if (document.getElementsByClassName("canvas-fireworks")[0]) {
   (0, _fireworks2.default)();
 }
 
-},{"./lib/fireworks":4,"./lib/particle":5,"jquery":1}]},{},[6]);
+},{"./lib/fireworks":5,"./lib/particle":6,"jquery":1}]},{},[7]);
