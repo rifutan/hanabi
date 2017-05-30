@@ -16,8 +16,8 @@ export default class SimpleFirework {
   create(sparkLength = 500, size = 1) {
     const colorList = ["#fff599", "#00ff7f", "#ff69b4", "#99eeff", "#ffffff"];
     this.color = colorList[Math.floor(Math.random() * colorList.length)];
-    this.sparkPositionX = 200 + Math.random() * (this.stage.canvas.width - 400);
-    this.sparkPositionY = 200 + Math.random() * (this.stage.canvas.height - 400);
+    this.sparkPositionX = 400 + Math.random() * (this.stage.canvas.width * 2 - 800);
+    this.sparkPositionY = 400 + Math.random() * (this.stage.canvas.height * 2 - 800);
     for (let i = 0; i < sparkLength; i++) {
       const spark = new createjs.Shape();
       this.stage.addChild(spark);
@@ -61,7 +61,7 @@ export default class SimpleFirework {
     for (let i = 0; i < this.sparks.length; i++) {
       const spark = this.sparks[i];
       spark.alpha = 1.0;
-      spark.vy += 0.2;
+      spark.vy += 0.05;
       spark.vx *= 0.9;
       spark.vy *= 0.9;
       spark.x += spark.vx;
