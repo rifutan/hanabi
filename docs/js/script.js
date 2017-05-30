@@ -9884,7 +9884,138 @@ var ColoredFirework = function (_SimpleFirework) {
 
 exports.default = ColoredFirework;
 
-},{"./SimpleFirework":3}],3:[function(require,module,exports){
+},{"./SimpleFirework":4}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _SimpleFirework2 = require("./SimpleFirework");
+
+var _SimpleFirework3 = _interopRequireDefault(_SimpleFirework2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DivisionFirework = function (_SimpleFirework) {
+  _inherits(DivisionFirework, _SimpleFirework);
+
+  function DivisionFirework(stage) {
+    _classCallCheck(this, DivisionFirework);
+
+    var _this = _possibleConstructorReturn(this, (DivisionFirework.__proto__ || Object.getPrototypeOf(DivisionFirework)).call(this, stage));
+
+    _this.initialize(stage);
+    return _this;
+  }
+
+  _createClass(DivisionFirework, [{
+    key: "initialize",
+    value: function initialize(stage) {
+      var _this2 = this;
+
+      this.stage = stage;
+      this.sparks = [];
+      this.divideSparks = [];
+      this.create(200, 1); // 引数はsparkの個数とサイズ
+      this.launchInit();
+      this.isLaunchCompleted = false;
+      this.isDivideCompleted = false;
+      createjs.Ticker.addEventListener("tick", function () {
+        if (_this2.isDivideCompleted) {
+          _this2.divide();
+        }
+      });
+    }
+  }, {
+    key: "proceed",
+    value: function proceed() {
+      for (var i = 0; i < this.sparks.length; i++) {
+        var spark = this.sparks[i];
+        spark.alpha = 1.0;
+        spark.vy += 0.2;
+        spark.vx *= 0.9;
+        spark.vy *= 0.9;
+        spark.x += spark.vx;
+        spark.y += spark.vy;
+        spark.life -= 1;
+        // 一定のlifeになったら分裂を開始する
+        if (Math.floor(spark.life) == 20) {
+          this.divideCreate(spark);
+          this.isDivideCompleted = true;
+        }
+        if (spark.life < 20) {
+          spark.alpha = spark.life / 20;
+        }
+        if (spark.life <= 0) {
+          this.stage.removeChild(spark);
+          this.sparks.splice(i, 1);
+          i -= 1;
+        }
+      }
+    }
+
+    // 基本的には create() => proceed() と同様の処理
+
+  }, {
+    key: "divideCreate",
+    value: function divideCreate(spark) {
+      var divideSparkLength = 5;
+      for (var i = 0; i < divideSparkLength; i++) {
+        var divideSpark = new createjs.Shape();
+        this.stage.addChild(divideSpark);
+        divideSpark.graphics.beginFill(this.color).drawCircle(0, 0, 1);
+        divideSpark.compositeOperation = "lighter";
+        divideSpark.x = spark.x;
+        divideSpark.y = spark.y;
+        divideSpark.angle = Math.random() * 360;
+        divideSpark.radian = divideSpark.angle * Math.PI / 180;
+        divideSpark.directionX = Math.cos(divideSpark.radian);
+        divideSpark.directionY = Math.sin(divideSpark.radian);
+        divideSpark.alpha = 0.0;
+        divideSpark.vx = (1 + 5 * Math.random()) * divideSpark.directionX;
+        divideSpark.vy = (1 + 5 * Math.random()) * divideSpark.directionY;
+        divideSpark.life = Math.random() * 30 + 10;
+        this.divideSparks.push(divideSpark);
+      }
+    }
+  }, {
+    key: "divide",
+    value: function divide() {
+      for (var i = 0; i < this.divideSparks.length; i++) {
+        var divideSpark = this.divideSparks[i];
+        divideSpark.alpha = 1.0;
+        divideSpark.vx *= 0.9;
+        divideSpark.vy *= 0.9;
+        divideSpark.x += divideSpark.vx;
+        divideSpark.y += divideSpark.vy;
+        divideSpark.life -= 1;
+        if (divideSpark.life < 20) {
+          divideSpark.alpha = divideSpark.life / 20;
+        }
+        if (divideSpark.life <= 0) {
+          this.stage.removeChild(divideSpark);
+          this.divideSparks.splice(i, 1);
+          i -= 1;
+        }
+      }
+    }
+  }]);
+
+  return DivisionFirework;
+}(_SimpleFirework3.default);
+
+exports.default = DivisionFirework;
+
+},{"./SimpleFirework":4}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9918,16 +10049,17 @@ var SimpleFirework = function () {
   _createClass(SimpleFirework, [{
     key: "create",
     value: function create() {
-      var colorList = ["#fff599", "#00ff7f", "#ff69b4", "#99eeff"];
-      var color = colorList[Math.floor(Math.random() * colorList.length)];
-      var size = 1;
-      var sparkLength = 500;
+      var sparkLength = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
+      var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+      var colorList = ["#fff599", "#00ff7f", "#ff69b4", "#99eeff", "#ffffff"];
+      this.color = colorList[Math.floor(Math.random() * colorList.length)];
       this.sparkPositionX = 200 + Math.random() * (this.stage.canvas.width - 400);
       this.sparkPositionY = 200 + Math.random() * (this.stage.canvas.height - 400);
       for (var i = 0; i < sparkLength; i++) {
         var spark = new createjs.Shape();
         this.stage.addChild(spark);
-        spark.graphics.beginFill(color).drawCircle(0, 0, size);
+        spark.graphics.beginFill(this.color).drawCircle(0, 0, size);
         spark.compositeOperation = "lighter";
         spark.x = this.sparkPositionX;
         spark.y = this.sparkPositionY;
@@ -9996,7 +10128,7 @@ var SimpleFirework = function () {
 
 exports.default = SimpleFirework;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10012,6 +10144,10 @@ var _ColoredFirework = require('./ColoredFirework');
 
 var _ColoredFirework2 = _interopRequireDefault(_ColoredFirework);
 
+var _DivisionFirework = require('./DivisionFirework');
+
+var _DivisionFirework2 = _interopRequireDefault(_DivisionFirework);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function fireworks1() {
@@ -10020,7 +10156,7 @@ function fireworks1() {
   var fireworks = [];
   var background = new createjs.Shape();
   background.graphics.beginLinearGradientFill(["#000000", "#191970"], [0, 1], stage.canvas.width / 2, 0, stage.canvas.width / 2, stage.canvas.height).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
-  background.alpha = 0.4;
+  background.alpha = 0.2;
   stage.addChild(background);
 
   window.setInterval(function () {
@@ -10029,16 +10165,19 @@ function fireworks1() {
   window.setInterval(function () {
     var coloredFirework = new _ColoredFirework2.default(stage);
   }, 2500);
+  window.setInterval(function () {
+    var divisionFirework = new _DivisionFirework2.default(stage);
+  }, 3000);
 
   createjs.Ticker.addEventListener("tick", function () {
     stage.update();
   });
 }
 
-},{"./ColoredFirework":2,"./SimpleFirework":3}],5:[function(require,module,exports){
+},{"./ColoredFirework":2,"./DivisionFirework":3,"./SimpleFirework":4}],6:[function(require,module,exports){
 "use strict";
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var _particle = require('./lib/particle');
@@ -10059,4 +10198,4 @@ if (document.getElementsByClassName("canvas-fireworks")[0]) {
   (0, _fireworks2.default)();
 }
 
-},{"./lib/fireworks":4,"./lib/particle":5,"jquery":1}]},{},[6]);
+},{"./lib/fireworks":5,"./lib/particle":6,"jquery":1}]},{},[7]);

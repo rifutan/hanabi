@@ -13,17 +13,15 @@ export default class SimpleFirework {
       }
     });
   }
-  create() {
-    const colorList = ["#fff599", "#00ff7f", "#ff69b4", "#99eeff"];
-    const color = colorList[Math.floor(Math.random() * colorList.length)];
-    const size = 1;
-    const sparkLength = 500;
+  create(sparkLength = 500, size = 1) {
+    const colorList = ["#fff599", "#00ff7f", "#ff69b4", "#99eeff", "#ffffff"];
+    this.color = colorList[Math.floor(Math.random() * colorList.length)];
     this.sparkPositionX = 200 + Math.random() * (this.stage.canvas.width - 400);
     this.sparkPositionY = 200 + Math.random() * (this.stage.canvas.height - 400);
     for (let i = 0; i < sparkLength; i++) {
       const spark = new createjs.Shape();
       this.stage.addChild(spark);
-      spark.graphics.beginFill(color).drawCircle(0, 0, size);
+      spark.graphics.beginFill(this.color).drawCircle(0, 0, size);
       spark.compositeOperation = "lighter";
       spark.x = this.sparkPositionX;
       spark.y = this.sparkPositionY;
